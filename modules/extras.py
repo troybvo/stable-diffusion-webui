@@ -155,7 +155,10 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
 
             if 'model' in key:
                 if key in theta_2:
-                    t2 = theta_2.get(key, torch.zeros_like(theta_1[key]))
+                    # Troy's edit
+                    # t2 = theta_2.get(key, torch.zeros_like(theta_1[key]))
+                    # theta_1[key] = theta_func1(theta_1[key], t2)
+                    t2 = torch.zeros_like(theta_1[key])
                     theta_1[key] = theta_func1(theta_1[key], t2)
                 else:
                     theta_1[key] = torch.zeros_like(theta_1[key])
@@ -195,7 +198,9 @@ def run_modelmerger(id_task, primary_model_name, secondary_model_name, tertiary_
                     result_is_instruct_pix2pix_model = True
                 else:
                     assert a.shape[1] == 9 and b.shape[1] == 4, f"Bad dimensions for merged layer {key}: A={a.shape}, B={b.shape}"
-                    theta_0[key][:, 0:4, :, :] = theta_func2(a[:, 0:4, :, :], b, multiplier)
+                    # Troy's edit
+                    # theta_0[key][:, 0:4, :, :] = theta_func2(a[:, 0:4, :, :], b, multiplier)
+                    theta_0[key][:, 0:4, :, :] = b
                     result_is_inpainting_model = True
             else:
                 theta_0[key] = theta_func2(a, b, multiplier)
